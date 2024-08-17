@@ -12,7 +12,7 @@ class DetailTransaksi extends Model
     use HasFactory;
     protected $table = 'detail_transaksis';
     protected $guarded = ['id'];
-    protected $with = ['transaksi','produk'];
+
 
     public function transaksi(){
         return $this->belongsTo(Transaksi::class);

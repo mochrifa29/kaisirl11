@@ -17,7 +17,7 @@
                         <div class="card-body">
                             <h4 class="card-title">Transaksi</h4>
                             <div class="row">
-                                <div class="col-10">
+                                <div class="col-12">
                                     <input type="text" wire:model.live='kode' class="form-control">
                                 </div>
                             </div>
@@ -37,7 +37,7 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $item->produk->kode }}</td>
                                             <td>{{ $item->produk->nama }}</td>
-                                            <td>{{ $item->produk->harga }}</td>
+                                            <td>{{ number_format($item->produk->harga, '0', '', '.') }}</td>
                                             <td>{{ number_format($item->jumlah, '0', '', '.') }}</td>
                                             <td>{{ number_format($item->produk->harga * $item->jumlah, '0', '', '.') }}
                                             </td>
@@ -55,32 +55,42 @@
                 <div class="col-4">
                     <div class="card border-primary">
                         <div class="card-body">
-                            <p class="card-text fw-bold">No Invoice : </p>
+                            <p class="card-text fw-bold">No Invoice : {{ $transaksi->no_invoice }} </p>
                             <div class="mb-3">
                                 <div class="row">
                                     <h5>Total Belanja</h5>
                                     <div class="d-flex justify-content-between">
                                         <span>Rp.</span>
-                                        <span>{{ number_format('50000000', '0', '', '.') }}</span>
+                                        <span>{{ number_format($totalBelanja, '0', '', '.') }}</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="mb-4">
                                 <h5>Bayar</h5>
-                                <input type="number" wire:model='bayar' class="form-control">
+                                <input type="number" wire:model.live='bayar' class="form-control">
                             </div>
                             <div class="mb-3">
                                 <div class="row">
                                     <h5>Kembalian</h5>
                                     <div class="d-flex justify-content-between">
                                         <span>Rp.</span>
-                                        <span>{{ number_format('50000000', '0', '', '.') }}</span>
+                                        <span>{{ number_format($kembalian, '0', '', '.') }}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-success w-100 mt-2">Bayar</button>
+                    @if ($bayar)
+                        @if ($kembalian < 0)
+                            <div class="alert alert-danger mt-2" role="alert">
+                                Uang kurang
+                            </div>
+                        @elseif($kembalian > 0)
+                            <button class="btn btn-success w-100 mt-2" wire:click='transaksi_selesai'>Bayar</button>
+                        @endif
+                    @endif
+
+
                 </div>
             </div>
         @endif

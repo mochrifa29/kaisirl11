@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\User as ModelsUser;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class User extends Component
@@ -14,6 +15,11 @@ class User extends Component
     public $password='';
     public $pengguna_terpilih;
 
+    public function mount(){
+        if (Auth::user()->peran != 'admin') {
+            abort(403);
+        }
+    }
     public function simpanEdit(){
         $this->validate([
             'nama' => 'required',

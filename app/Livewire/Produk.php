@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Imports\Produk as ImportsProduk;
 use App\Models\Produk as ModelsProduk;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
@@ -18,6 +19,12 @@ class Produk extends Component
     public $stok='';
     public $fileExcel;
     public $produk_terpilih;
+
+    public function mount(){
+        if (Auth::user()->peran != 'admin') {
+            abort(403);
+        }
+    }
 
     public function importExcel(){
         Excel::import(new ImportsProduk,$this->fileExcel);
